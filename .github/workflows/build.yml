@@ -1,0 +1,21 @@
+name: Compilar
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reparar estructura (por si los archivos se subieron dispersos)
+        run: bash scripts/reparar-estructura.sh
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - run: mvn -B clean package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KryosMascotas
+          path: target/KryosMascotas.jar
